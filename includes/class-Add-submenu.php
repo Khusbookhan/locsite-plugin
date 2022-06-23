@@ -21,9 +21,7 @@ class Add_submenu
 
      add_action('admin_menu',array($this, 'my_plugin_menu'));
 
-     //add_action( 'admin_init',array($this, 'my_redirect_if_user_not_logged_in' ));
-      
-       //add_action('admin_init',array($this, 'register_and_build_fields'));
+     
     }
 
     /**
@@ -52,29 +50,10 @@ class Add_submenu
     *include class-submenu-callback.php in this file .this class have 
     */
 
-     require_once(plugin_dir_path(__FILE__).'class-submenu-callback.php');
-
-    // public  function my_redirect_if_user_not_logged_in() {
- 
-    if ( !is_user_logged_in() && isset( $_GET['fl_builder'])) {
-        auth_redirect();
+    require_once(plugin_dir_path(__FILE__).'submenu-callback.php');
+       //require_once(plugin_dir_path(__FILE__).'/template/sebmenu-archive.php');
     }
-     
-    // wp_redirect( 'http://localhost/mywordpress/my-account/');
-     
-    // exit;
-     
-    // }
-     
-    // }
-
-     
-     }
-
     
 }
- 
-
-
 
 new Add_submenu();

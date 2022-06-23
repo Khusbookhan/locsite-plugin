@@ -3,29 +3,25 @@
 
 <form method="POST">
     <label for="checkbox">  ENABLE LOCK SITE</label>
-    <input type="checkbox" name="checkbox" id="checkbox" value="<?php echo $value; ?>">
+    <input type="checkbox" name="checkbox" id="checkbox" name="check[]" value="checked">
+    
     
     <br>
     <br>
 
     <h1>Page Selector</h1>
     <div class="page_selector_dropdown" id="pages" >
-    <select id="page_selector" class="page"  >
+    <select id="page_selector" class="page" name="pages[]" multiple="multiple"  >
     <?php // Query for listing all pages in the select box loop
     $my_wp_query = new WP_Query();
     $all_wp_pages = $my_wp_query->query( array(
-    'post_type' => 'page',
-    'posts_per_page' => -1
-    ));
-
+    'posts_per_page' => -1,
+     'post_type' => 'page'   
+    ));   
     foreach ($all_wp_pages as $value){
     $post = get_page($value);
     $title = $post->post_title;
     $id = $post->ID;
-
-    // For example
-    // <option value="pageId32">Page title</option>
-
     echo '<option value="pageId' . $id. '">' . $title . '</option>';
     }; 
     ?>
@@ -33,35 +29,16 @@
     </select>
     </div>
     <?php 
-     /**
-     * checkbox value saving 
-     */ 
-     if (isset($_POST['checkbox'])) {
-        $value = $_POST['checkbox'];
-        update_option('checkbox', $value);
-        
-    }
 
-    $value = get_option('checkbox', 'hey-ho');
+   function save_checkbox(){
+   $checkboxValue = $_REQUEST['checked'];
 
-   
-   add_action( 'wp', 'login_redirect' );
- 
-    function login_redirect() {
+   update_post_meta($coll_id, 'check', $checkboxValue );
 
-    // Current Page
-    global $pagenow;
-
-    // Check to see if user in not logged in and not on the login page
-    if(!is_user_logged_in() && $pagenow != 'wp-login.php')
-          // If user is, Redirect to Login form.
-          auth_redirect();
-    }
-
-
+   die();
+   }
+   add_action( 'wp_ajax_save_checkbox', 'save_checkbox' );
     ?>
-
-
 
     <br>
     <br>
@@ -334,4 +311,7 @@
             <option value="WF" label="Wallis and Futuna">Wallis and Futuna</option>
         </optgroup>
     </select>
+    <p class="submit">
+				<input type="submit" name="submit" class="button-primary" value="Save Changes" id="submit" />
+			</p>
 </form>
